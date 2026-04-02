@@ -2,44 +2,59 @@
 <html>
 <head>
   <title>Smart Complaint Analyzer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
     body {
+      margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
-      color: black;
-      text-align: center;
-      padding: 50px;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      color: white;
     }
 
-    h1 {
+    header {
+      padding: 20px;
+      text-align: center;
+      font-size: 28px;
+      font-weight: bold;
+      background: rgba(0,0,0,0.2);
+    }
+
+    .hero {
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .hero h1 {
       font-size: 2.5rem;
     }
 
     .container {
       background: white;
       color: black;
-      padding: 30px;
-      border-radius: 15px;
-      width: 60%;
+      max-width: 700px;
       margin: auto;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
     }
 
     textarea {
-      width: 90%;
+      width: 100%;
       height: 120px;
-      padding: 10px;
+      padding: 12px;
       border-radius: 10px;
       border: 1px solid #ccc;
       font-size: 16px;
     }
 
     button {
+      width: 100%;
       margin-top: 15px;
-      padding: 12px 25px;
+      padding: 14px;
       border: none;
       border-radius: 10px;
-      background: #667eea;
+      background: #2a5298;
       color: white;
       font-size: 16px;
       cursor: pointer;
@@ -47,54 +62,77 @@
     }
 
     button:hover {
-      background: #5a67d8;
+      background: #1e3c72;
+    }
+
+    .sentiment {
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+      text-align: center;
     }
 
     .card {
-      background: #f9f9f9;
+      background: #f4f6f9;
       margin-top: 15px;
       padding: 15px;
       border-radius: 10px;
-      text-align: left;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      box-shadow: 0 5px 10px rgba(0,0,0,0.1);
       animation: fadeIn 0.5s ease-in-out;
     }
 
-    a {
-      color: #667eea;
-      font-weight: bold;
-      text-decoration: none;
+    .card b {
+      color: #2a5298;
     }
 
-    a:hover {
-      text-decoration: underline;
+    a {
+      color: #1e3c72;
+      font-weight: bold;
+    }
+
+    #loading {
+      text-align: center;
+      margin-top: 15px;
+      display: none;
+      font-weight: bold;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+      font-size: 14px;
+      opacity: 0.8;
     }
 
     @keyframes fadeIn {
       from {opacity: 0; transform: translateY(10px);}
       to {opacity: 1; transform: translateY(0);}
     }
-
-    .sentiment {
-      font-size: 20px;
-      margin-top: 20px;
-      font-weight: bold;
-    }
-
   </style>
 </head>
 
 <body>
 
-<h1> Smart Complaint Analyzer</h1>
+<header>🚀 Smart Complaint Analyzer</header>
+
+<div class="hero">
+  <h1>Analyze Public Complaints Instantly</h1>
+  <p>Detect issues, departments, and actions in seconds</p>
+</div>
 
 <div class="container">
-  <textarea id="complaint" placeholder="Describe your issue..."></textarea><br>
+  <textarea id="complaint" placeholder="Describe your issue..."></textarea>
   <button onclick="analyze()">Analyze Complaint</button>
 
+  <div id="loading">Analyzing...</div>
   <div class="sentiment" id="sentiment"></div>
   <div id="results"></div>
 </div>
+
+<footer>
+  Made by Supriya 💙
+</footer>
 
 <script>
 async function analyze() {
@@ -102,13 +140,13 @@ async function analyze() {
 
   const response = await fetch("https://complaint-analyzer-v5ro.onrender.com/analyze", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
+    headers: {"Content-Type": "application/json"},
     body: JSON.stringify({ text })
   });
 
   const data = await response.json();
+
+  document.getElementById("loading").style.display = "none";
 
   document.getElementById("sentiment").innerText =
     "Sentiment: " + data.sentiment;
